@@ -1,0 +1,13 @@
+plugins {
+	id 'java-platform'
+}
+
+javaPlatform {
+	allowDependencies()
+}
+
+dependencies {
+	api platform(libs.org.mockito.mockito.bom)
+	api platform(libs.org.junit.junit.bom)
+	api libs.org.assertj.assertj.core
+}

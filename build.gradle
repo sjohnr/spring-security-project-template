@@ -1,0 +1,15 @@
+buildscript {
+	dependencies {
+		classpath libs.org.jetbrains.kotlin.gradle.plugin
+	}
+}
+
+plugins {
+	alias(libs.plugins.io.spring.security.maven)
+	alias(libs.plugins.io.spring.security.project)
+	alias(libs.plugins.io.spring.security.release)
+}
+
+group = "org.springframework.security"
+description = "Spring Security"
+

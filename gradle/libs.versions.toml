@@ -1,0 +1,17 @@
+[versions]
+
+spring-security-plugin-version = "1.0.4-SNAPSHOT"
+
+[libraries]
+
+org-assertj-assertj-core = "org.assertj:assertj-core:3.25.3"
+org-jetbrains-kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24"
+org-junit-junit-bom = "org.junit:junit-bom:5.10.2"
+org-mockito-mockito-bom = "org.mockito:mockito-bom:5.11.0"
+
+[plugins]
+
+io-spring-security-maven = "io.spring.security.maven:1.0.4-SNAPSHOT"
+io-spring-security-project = "io.spring.security.project:1.0.4-SNAPSHOT"
+io-spring-security-release = "io.spring.security.release:1.0.4-SNAPSHOT"
+org-jetbrains-kotlin-jvm = "org.jetbrains.kotlin.jvm:1.9.24"
