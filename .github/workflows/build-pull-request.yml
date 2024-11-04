@@ -1,0 +1,12 @@
+name: Build Pull Request
+
+on: pull_request
+
+jobs:
+  build:
+    name: Build
+    uses: spring-io/spring-security-release-tools/.github/workflows/build-pull-request.yml@v1
+    with:
+      java-version: '17'
+      distribution: 'temurin'
+    secrets: inherit

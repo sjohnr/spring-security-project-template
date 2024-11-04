@@ -1,0 +1,29 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches-ignore:
+      - 'gh-pages'
+      - 'dependabot/**'
+    tags:
+      - '**'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+
+jobs:
+  partial-build:
+    name: Deploy Antora (partial build)
+    uses: spring-io/spring-security-release-tools/.github/workflows/dispatch-deploy-docs.yml@v1
+    if: ${{ github.ref_type == 'branch' && github.repository_owner == 'spring-projects' }}
+    with:
+      build-type: partial
+    secrets: inherit
+  full-build:
+    name: Deploy Antora (full build)
+    uses: spring-io/spring-security-release-tools/.github/workflows/dispatch-deploy-docs.yml@v1
+    if: ${{ github.ref_type == 'tag' && github.repository_owner == 'spring-projects' }}
+    with:
+      build-type: full
+    secrets: inherit
