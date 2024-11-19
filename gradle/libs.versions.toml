@@ -6,7 +6,7 @@ spring-security-plugin-version = "1.0.4-SNAPSHOT"
 
 org-assertj-assertj-core = "org.assertj:assertj-core:3.25.3"
 org-jetbrains-kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24"
-org-junit-junit-bom = "org.junit:junit-bom:5.10.2"
+org-junit-junit-bom = "org.junit:junit-bom:5.10.5"
 org-mockito-mockito-bom = "org.mockito:mockito-bom:5.11.0"
 org-springframework-boot-spring-boot-dependencies = "org.springframework.boot:spring-boot-dependencies:3.4.0-RC1"
 
