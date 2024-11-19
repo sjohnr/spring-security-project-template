@@ -1,0 +1,100 @@
+plugins {
+	id "io.spring.antora.generate-antora-yml" version "0.0.1"
+	id "org.antora" version "1.0.0"
+	id "java"
+}
+
+group = project.rootProject.group
+version = project.rootProject.version
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_17
+}
+
+compileJava {
+	options.compilerArgs << '-parameters'
+}
+
+antora {
+	options = [clean: true, fetch: !project.gradle.startParameter.offline, stacktrace: true]
+	environment = [
+		'BUILD_REFNAME': 'HEAD',
+		'BUILD_VERSION': project.version,
+	]
+}
+
+repositories {
+	mavenCentral()
+	maven { url "https://repo.spring.io/milestone" }
+	maven { url "https://repo.spring.io/snapshot" }
+}
+
+dependencies {
+	implementation(platform(libs.org.springframework.boot.spring.boot.dependencies))
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	testImplementation "org.springframework.security:spring-security-test"
+}
+
+def generateAttributes() {
+	return [
+			"spring-security-project-template-version": project.version
+	] + resolvedVersions(project.configurations.testRuntimeClasspath)
+}
+
+static def resolvedVersions(Configuration configuration) {
+	return configuration.resolvedConfiguration
+			.resolvedArtifacts
+			.collectEntries { [(it.name + '-version'): it.moduleVersion.id.version] }
+}
+
+tasks.named("generateAntoraYml") {
+	asciidocAttributes = project.provider {
+		generateAttributes()
+	}
+}
+
+tasks.register("api", Javadoc) { api ->
+	group = "Documentation"
+	description = "Generates aggregated Javadoc API documentation."
+	doLast {
+		if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+			project.copy {
+				from api.destinationDir
+				into api.destinationDir
+				include "element-list"
+				rename "element-list", "package-list"
+			}
+		}
+	}
+	source project.rootProject.subprojects
+		.findAll { it.plugins.hasPlugin(JavaLibraryPlugin) }
+		.collect { it.extensions.getByType(JavaPluginExtension) }
+		.collect { it.sourceSets.main.allJava }
+}
+
+tasks.register("docsZip", Zip) {
+	dependsOn api
+	group = "Distribution"
+	description = "Build -docs archive containing all docs for deployment at docs.spring.io."
+	archiveBaseName.set(project.rootProject.name)
+	archiveClassifier.set("docs")
+	into "docs"
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+docsZip {
+	from (api) {
+		into "api"
+	}
+}
+
+tasks.register("docs") {
+	dependsOn docsZip
+	group = "Documentation"
+	description = "An aggregator task to aggregate all the documentation."
+}
+
+tasks.named("test") {
+	useJUnitPlatform()
+}
