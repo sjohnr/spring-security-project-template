@@ -79,14 +79,11 @@ tasks.register("docsZip", Zip) {
 	description = "Build -docs archive containing all docs for deployment at docs.spring.io."
 	archiveBaseName.set(project.rootProject.name)
 	archiveClassifier.set("docs")
-	into "docs"
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-docsZip {
 	from (api) {
 		into "api"
 	}
+	into "docs"
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.register("docs") {
