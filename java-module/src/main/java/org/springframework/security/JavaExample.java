@@ -27,6 +27,10 @@ public final class JavaExample {
 	private JavaExample() {
 	}
 
+	/**
+	 * The application entry point.
+	 * @param args The arguments
+	 */
 	public static void main(String[] args) {
 		System.out.println("Hello, world");
 	}
