@@ -1,6 +1,7 @@
 plugins {
 	alias(libs.plugins.io.spring.antora.generate.antora.yml)
 	alias(libs.plugins.org.antora)
+	alias(libs.plugins.org.hidetake.ssh)
 	id "java"
 }
 
@@ -90,6 +91,74 @@ tasks.register("docs") {
 	dependsOn docsZip
 	group = "Documentation"
 	description = "An aggregator task to aggregate all the documentation."
+}
+
+tasks.register("deployDocs") {
+	dependsOn "docsZip"
+	group = "Documentation"
+	description = "Deploy api documentation to the remote server."
+
+	ssh.settings {
+		knownHosts = allowAnyHosts
+	}
+
+	remotes {
+		docs {
+			role "docs"
+
+			// Apply deployDocsHost property
+			if (hasProperty("deployDocsHost")) {
+				host = findProperty("deployDocsHost").toString()
+			} else {
+				host = "docs.spring.io"
+			}
+
+			// Apply deployDocsSshUsername property
+			if (hasProperty("deployDocsSshUsername")) {
+				user = findProperty("deployDocsSshUsername").toString()
+			}
+
+			// Apply deployDocsSshKeyPath or deployDocsSshKey property
+			if (hasProperty("deployDocsSshKeyPath")) {
+				identity = file(findProperty("deployDocsSshKeyPath"))
+			} else if (hasProperty("deployDocsSshKey")) {
+				identity = findProperty("deployDocsSshKey")
+			}
+
+			// Apply deployDocsSshPassphrase property
+			if (hasProperty("deployDocsSshPassphrase")) {
+				passphrase = findProperty("deployDocsSshPassphrase").toString()
+			}
+
+			retryCount = 5 // retry 5 times (default is 0)
+			retryWaitSec = 10 // wait 10 seconds between retries (default is 0)
+		}
+	}
+
+	doLast {
+		ssh.run {
+			session(remotes.docs) {
+				def now = System.currentTimeMillis()
+				def name = rootProject.name
+				def version = rootProject.version
+				def tempPath = "/tmp/${name}-${now}-docs/".replaceAll(" ", "_")
+				execute "mkdir -p $tempPath"
+
+				tasks.docsZip.outputs.each { o ->
+					put from: o.files, into: tempPath
+				}
+
+				execute "unzip $tempPath*.zip -d $tempPath"
+
+				def extractPath = "/var/www/domains/spring.io/docs/htdocs/autorepo/docs/${name}/${version}/"
+
+				execute "rm -rf $extractPath"
+				execute "mkdir -p $extractPath"
+				execute "mv $tempPath/docs/* $extractPath"
+				execute "chmod -R g+w $extractPath"
+			}
+		}
+	}
 }
 
 tasks.named("test") {
