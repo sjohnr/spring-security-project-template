@@ -1,6 +1,6 @@
 [versions]
 
-spring-security-plugin-version = "1.0.4-SNAPSHOT"
+spring-security-plugin-version = "1.0.4"
 
 [libraries]
 
