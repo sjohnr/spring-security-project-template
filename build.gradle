@@ -14,14 +14,14 @@ group = "org.springframework.security"
 description = "Spring Security"
 
 springRelease {
-    repositoryOwner = "spring-projects"
-    repositoryName = "spring-security-project-template"
-    weekOfMonth = 3
-    dayOfWeek = 1
-    referenceDocUrl = "https://docs.spring.io/spring-security-project-template/reference/{version}/index.html"
-    apiDocUrl = "https://docs.spring.io/spring-security-project-template/site/docs/{version}/api/"
-    replaceVersionInReferenceDocUrl = true
-    releaseVersionPrefix = "v"
+	repositoryOwner = "spring-projects"
+	repositoryName = "spring-security-project-template"
+	weekOfMonth = 3
+	dayOfWeek = 1
+	referenceDocUrl = "https://docs.spring.io/spring-security-project-template/reference/{version}/index.html"
+	apiDocUrl = "https://docs.spring.io/spring-security-project-template/site/docs/{version}/api/"
+	replaceVersionInReferenceDocUrl = true
+	releaseVersionPrefix = "v"
 }
 
 develocity {
