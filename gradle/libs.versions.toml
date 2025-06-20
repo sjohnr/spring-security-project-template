@@ -14,7 +14,7 @@ org-springframework-boot-spring-boot-dependencies = "org.springframework.boot:sp
 
 io-spring-antora-generate-antora-yml = "io.spring.antora.generate-antora-yml:0.0.1"
 io-spring-security-maven = "io.spring.security.maven:1.0.7"
-io-spring-security-project = "io.spring.security.project:1.0.6"
+io-spring-security-project = "io.spring.security.project:1.0.7"
 io-spring-security-release = "io.spring.security.release:1.0.7"
 org-antora = "org.antora:1.0.0"
 org-hidetake-ssh = "org.hidetake.ssh:2.10.1"
